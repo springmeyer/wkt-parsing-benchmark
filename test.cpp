@@ -221,16 +221,29 @@ int main( int argc, char** argv)
         unsigned iterations = 10000;
         unsigned threads = 10;
 
-        // mapnik
+        // mapnik threaded
         {
             test_mapnik runner(wkt_list,iterations,threads);
             benchmark(runner, "mapnik");
         }
 
-        // geos
+        // geos threaded
         {
             initGEOS(geos_notice, geos_error);
             test_geos runner(wkt_list,iterations,threads);
+            benchmark(runner, "geos");
+        }
+
+        // mapnik serial, no threads
+        {
+            test_mapnik runner(wkt_list,iterations*threads,0);
+            benchmark(runner, "mapnik");
+        }
+
+        // geos serial, no threads
+        {
+            initGEOS(geos_notice, geos_error);
+            test_geos runner(wkt_list,iterations*threads,0);
             benchmark(runner, "geos");
         }
     }
